@@ -5,6 +5,13 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { withTheme} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import { selectors, setPathwayToView, addOrEditPathway } from '../../store';
 import { selectors as layoutSelectors, setRightPaneLoading } from '../../../../layouts/TwoColumn/store';
 import { ngFetch } from '../../../../providers/NGFetch';
@@ -15,12 +22,62 @@ import RightPaneWithTitle from '../../../../components/RightPaneWithTitle';
 import Milestones from './Milestones';
 // import history from '../../../../providers/routing/app-history';
 import MentorshipTree from './MentorshipTree';
-import Courses from './Courses';
+import CoursesList from '../../Courses/List';
+
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={1}>
+          <React.Fragment>{children}</React.Fragment>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
 const PathwayEdit = ({ rightPaneLoading, actions, match, theme }) => {
 
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+
   const { pathwayId } = match.params;
   const { enqueueSnackbar } = useSnackbar();
+  const [trackingEnabled, setTrackingEnabled] = React.useState(null)
   
   const [pathway, setPathway] = React.useState(null);
   useEffect(() => {
@@ -36,6 +93,8 @@ const PathwayEdit = ({ rightPaneLoading, actions, match, theme }) => {
 
   const [submitBtnDisabled, setSubmitBtnDisabled] = React.useState(false);
   const onSubmit = async (data) => {
+    console.log(data,'data')
+    console.log(typeof data.tracking_enabled, 'data.tracking_enabled')
     setSubmitBtnDisabled(true);
     delete data.createdAt
     const response = await ngFetch(`/pathways/${pathwayId}`, {
@@ -51,16 +110,45 @@ const PathwayEdit = ({ rightPaneLoading, actions, match, theme }) => {
   if (!pathway || rightPaneLoading) {
     return <React.Fragment />
   }
+  const selectedTrackingEnabled = (v) => {
+    setTrackingEnabled(v)
+  }
 
+  const fieldsToWatch ={
+    tracking_enabled:selectedTrackingEnabled,
+  }
 
   return (
-    <RightPaneWithTitle title="Edit Pathway" closeLink="/pathways">
-      <FormBuilder structure={getPathwayEditFormStructure(pathway)} onSubmit={onSubmit} initialValues={pathway} submitBtnDisabled={submitBtnDisabled} />
-      <Spacer height={theme.spacing(1)} />
-      <MentorshipTree pathway={pathway} />
-      <Courses pathway={pathway} />
-      <Milestones pathway={pathway} />
-    </RightPaneWithTitle>
+
+    <React.Fragment>
+      <AppBar position="static">
+        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered>
+          <Tab label="Pathways" {...a11yProps(0)} style={{minWidth:"10%"}} />
+          <Tab label="Courses" {...a11yProps(1)} style={{minWidth:"10%"}} />
+          <Tab label="Trackingway Form" {...a11yProps(2)} style={{minWidth:"10%"}}  />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        <React.Fragment>
+          <RightPaneWithTitle title="Edit Pathway" closeLink="/pathways">
+            <FormBuilder structure={getPathwayEditFormStructure(pathway,trackingEnabled)} onSubmit={onSubmit} initialValues={pathway} submitBtnDisabled={submitBtnDisabled} fieldsToWatch={fieldsToWatch} />
+            <Spacer height={theme.spacing(1)} />
+            <MentorshipTree pathway={pathway} />
+            <Spacer height={theme.spacing(1)} />
+            <Milestones pathway={pathway} />
+          </RightPaneWithTitle>
+        </React.Fragment>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <RightPaneWithTitle title="Courses" closeLink="/pathways">
+          <CoursesList pathwayId={pathway.id} /> 
+        </RightPaneWithTitle>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        Item Three
+      </TabPanel>
+    </React.Fragment>
+
   );
 }
 
@@ -78,3 +166,5 @@ export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(PathwayEdit);
+
+

@@ -15,9 +15,9 @@ const SelectField = ({
   fullWidth,
 }) => {
   return (
-    <section key={field.name}>
+    <section key={field.name} disabled={field.customProps.disabled}>
       <FormControl
-        error={Boolean(errors[field.name])}
+        error={!!errors[field.name]}
         variant="outlined"
         fullWidth={fullWidth}
       >

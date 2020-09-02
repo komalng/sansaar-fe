@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
+import {Button} from '@material-ui/core'
 import { useDrop } from "react-dnd"
 import update from "immutability-helper"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import { compose } from "recompose"
+import {get} from 'lodash'
 import { ngFetch } from "../../../../providers/NGFetch"
 import { ItemTypes } from "./ItemTypes"
 import { RenderCard } from "./Card"
@@ -28,12 +30,11 @@ const Container = ({
   useEffect(
     () => {
       const fetchData = async () => {
-        actions.setMainPaneLoading(true)
         const response = await ngFetch(`/pathways/${pathwayId}/courses`, {
           method: "GET",
         })
         actions.setAllCourses(response)
-        actions.setMainPaneLoading(false)
+
         setCards(response)
       }
       fetchData()
@@ -49,6 +50,20 @@ const Container = ({
       index: cards.indexOf(card),
     }
   }
+
+
+
+ 
+  console.log(cards,'cardscards')
+  
+
+  const handleSave = async (data) => {
+    const courseIds = data.map(card => get(card, "course_id" , ''))
+    console.log(courseIds,'courseIdscourseIds')
+//     const response =await ngFetch(`/pathways/${pathwayId}/courses`, {method: 'POST', body: data});
+    // actions.addOrEditCourse({pathwaysCourse: response.pathwayCourse, pathwaysCourseId:response.pathwayCourse.id});
+    // enqueueSnackbar('Courses rearranged.', { variant: 'success' });
+  };
 
   const moveCard = (id, atIndex) => {
     const { card, index } = findCard(id)
@@ -76,6 +91,7 @@ const Container = ({
               findCard={findCard}
             />
           ))}
+        <Button variant="contained" color="primary" onClick={() => handleSave(cards)}>Save</Button>
       </div>
     </React.Fragment>
   )

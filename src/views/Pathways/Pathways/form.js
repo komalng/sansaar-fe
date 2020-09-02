@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import NG_CONSTANTS from 'ng-constants';
+// import NG_CONSTANTS from 'ng-constants';
 import { ngFetch } from '../../../providers/NGFetch';
 
 yup.addMethod(yup.string, 'pathwayCodeIsUnique', function CODE({ currentCode }) {
@@ -29,7 +29,9 @@ const createdAtField = {
   },
 }
 
-export const getPathwayAddFormStructure = (pathway) => ([
+export const getPathwayAddFormStructure = (pathway,trackingEnabled) => {
+
+return([
   {
     name: "code",
     type: "text",
@@ -94,7 +96,8 @@ export const getPathwayAddFormStructure = (pathway) => ([
       customProps: {
         id: "",
         label: "select a tracking frequency",
-        defaultValue: "",
+        defaultValue: "weekly",
+        disabled: trackingEnabled === 'false'
       },
     },
     {
@@ -112,7 +115,8 @@ export const getPathwayAddFormStructure = (pathway) => ([
       customProps: {
         id: "",
         label: "select a tracking day of week",
-        defaultValue: "",
+        defaultValue: "6",
+        disabled: trackingEnabled === 'false'
       },
     },
     {
@@ -129,14 +133,16 @@ export const getPathwayAddFormStructure = (pathway) => ([
       customProps: {
         id: "",
         label: "select a tracking days lock before cycle",
-        defaultValue: "",
+        defaultValue: "1",
+        disabled: trackingEnabled === 'false'
       },
     },
   
 ])
+}
 
-export const getPathwayEditFormStructure = (pathway) => {
-  const fields = getPathwayAddFormStructure(pathway);
+export const getPathwayEditFormStructure = (pathway,trackingEnabled) => {
+  const fields = getPathwayAddFormStructure(pathway,trackingEnabled);
   fields.push(createdAtField);
   return fields;
 };

@@ -13,6 +13,7 @@ import { ngFetch } from '../../../providers/NGFetch';
 const PathwayAdd = ({actions}) => {
 
   const { enqueueSnackbar } = useSnackbar();
+  const [trackingEnabled, setTrackingEnabled] = React.useState(null)
 
   const [submitBtnDisabled, setSubmitBtnDisabled] = React.useState(false);
 
@@ -26,9 +27,18 @@ const PathwayAdd = ({actions}) => {
     history.push(`/pathways/${pathwayId}`);
   };
 
+  const selectedTrackingEnabled = (v) => {
+    setTrackingEnabled(v)
+  }
+
+
+  const fieldsToWatch ={
+    tracking_enabled:selectedTrackingEnabled,
+  }
+const pathway=""
   return (
     <RightPaneWithTitle title="Add Pathway" closeLink="/pathways">
-      <FormBuilder structure={getPathwayAddFormStructure()} onSubmit={onSubmit} submitBtnDisabled={submitBtnDisabled} />
+      <FormBuilder structure={getPathwayAddFormStructure(pathway,trackingEnabled)} onSubmit={onSubmit} submitBtnDisabled={submitBtnDisabled} fieldsToWatch={fieldsToWatch} />
     </RightPaneWithTitle>
   );
 };

@@ -18,18 +18,14 @@ const CourseAdd = ({ actions, match }) => {
   const {pathwayId} = match.params;
   const { enqueueSnackbar } = useSnackbar();
 
-  // const [coursesAlreadyPresent, setCoursesAlreadyPresent] = React.useState(null);
 
   const [submitBtnDisabled, setSubmitBtnDisabled] = React.useState(false);
-  // const [allCourses, setAllCourses] = React.useState(null);
   const [coursesNeedToShow, setCoursesNeedToShow] = React.useState(null);
   useEffect(() => {
     const fetchallCourses = async () => {
       actions.setRightPaneLoading(true);
       const courses = await ngFetch(`/courses`);
-      // setAllCourses(courses.availableCourses);
       const pathwayCourses = await ngFetch(`/pathways/${pathwayId}/courses`);
-      // setCoursesAlreadyPresent(PathwayCourses);
       setCoursesNeedToShow(pullAllBy(courses.availableCourses,pathwayCourses, 'name'))
       actions.setRightPaneLoading(false);
     }

@@ -5,20 +5,16 @@ import {  withTheme } from "@material-ui/core"
 import { compose } from "recompose"
 import { withRouter } from 'react-router';
 import Container from './Container'
-import MainPaneWithTitle from '../../../../components/MainPaneWithTitle';
 
 const CoursesList =({
-    match,
+    pathwayId,
   }) => {
-
-    const { pathwayId } = match.params
-
   return (
-    <MainPaneWithTitle addBtnLink={`/pathways/${pathwayId}/courses/add`} title='Courses'>
+    <React.Fragment>
       <DndProvider backend={HTML5Backend}>
         <Container pathwayId={pathwayId} />
       </DndProvider>
-    </MainPaneWithTitle>
+    </React.Fragment>
   )
 }
 

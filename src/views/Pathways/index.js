@@ -6,19 +6,10 @@ import PathwayAdd from './Pathways/Add';
 import MilestonesList from './Milestones/List';
 import MilestoneEdit from './Milestones/Edit';
 import MilestoneAdd from './Milestones/Add';
-import CoursesList from './Courses/List';
 import MentorshipTree from './MentoshipTree'
-import CourseAdd from './Courses/Add';
-import CourseEdit from './Courses/Edit';
 
 const PathwaysSection = () => {
   const mainPaneRoutes = [
-    {
-      path: '/pathways/:pathwayId/courses',
-      exact: false,
-      component: CoursesList,
-      key: 'COURSES_LIST'
-    },
     {
       path: '/pathways/:pathwayId/milestones',
       exact: false,
@@ -63,18 +54,6 @@ const PathwaysSection = () => {
       exact: true,
       component: MilestoneEdit,
       key: 'MILESTONE_ADD'
-    },
-    {
-      path: '/pathways/:pathwayId/courses/add',
-      exact: true,
-      component: CourseAdd,
-      key: 'COURSE_ADD'
-    },
-    {
-      path: '/pathways/:pathwayId/courses/:pathwayCourseId/edit',
-      exact: true,
-      component: CourseEdit,
-      key: 'COURSE_EDIT'
     },
   ];
 
