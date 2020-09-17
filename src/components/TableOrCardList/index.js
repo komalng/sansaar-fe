@@ -57,7 +57,7 @@ const TableOrCardList = ({
     })
   }, [data, tableColumns])
 
-
+  console.log(newData,"datat")
   const columns = React.useMemo(() => {
     return tableColumns.map(column => {
       if (column.disableFilters) {
@@ -83,7 +83,7 @@ const TableOrCardList = ({
         .join(";")
       return { ...row, searchableText }
     })
-  }, [newData,searchableKeys])
+  }, [newData, searchableKeys])
 
 
   const visibleData = React.useMemo(() => {

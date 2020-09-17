@@ -1,5 +1,7 @@
 export const getInitialsFromName = (name) => {
+  console.log(name.split(" "))
   const tokens = name.split(' ').map(t => t[0]);
+  console.log(tokens,"token")
   return tokens.join('');
 }
 

@@ -5,7 +5,7 @@ import NGDrawer from './components/Drawer';
 const HeaderWithDrawer = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
-
+console.log(toggleDrawer,"Navbar")
   return (
     <React.Fragment>
       <NGAppBar toggleDrawer={toggleDrawer} />

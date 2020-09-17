@@ -95,6 +95,7 @@ export const ngFetch = async (path, options = {}) => {
   
   if (responseType && isResponseJson(responseType)) {
     const body = await response.json();
+    console.log(body,"----")
     if (response.status === 401) {
       logout();
       history.push('/login');

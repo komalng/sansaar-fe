@@ -1,5 +1,5 @@
-import React,{ useEffect, Fragment} from 'react';
-import {  Typography, withTheme } from '@material-ui/core';
+import React, { useEffect, Fragment } from 'react';
+import { Typography, withTheme } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -15,11 +15,11 @@ import Spacer from '../../../components/Spacer';
 
 
 function UserList({ mainPaneWidth, actions, allUsers, theme, mainPaneLoading }) {
-  
+
   useEffect(() => {
     const fetchData = async () => {
       actions.setMainPaneLoading(true);
-      const response = await ngFetch('/users', { method: 'GET'});
+      const response = await ngFetch('/users', { method: 'GET' });
       actions.setAllUsers(response.users);
       actions.setMainPaneLoading(false);
     };
@@ -43,7 +43,7 @@ function UserList({ mainPaneWidth, actions, allUsers, theme, mainPaneLoading }) 
   const handleRowClick = (userId) => {
     history.push(`/users/${userId}`)
   }
-
+  console.log(allUsers, "Allusers")
   return (
     <Fragment>
 

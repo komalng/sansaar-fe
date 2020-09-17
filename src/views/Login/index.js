@@ -3,7 +3,8 @@ import GoogleLogin from 'react-google-login';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   withStyles, Box, Avatar, Button,
- Container } from '@material-ui/core';
+  Container
+} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { bindActionCreators } from 'redux';
 import { compose } from 'recompose';
@@ -44,7 +45,12 @@ const LoginPage = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authToken]);
-
+  console.log(authToken,
+    authError,
+    authPending,
+    actions,
+    theme,
+    location,"=komal===")
   return (
     <React.Fragment>
       <Container maxWidth={false}>
@@ -78,8 +84,8 @@ const LoginPage = ({
             onFailure={onGoogleLoginError}
             onRequest={onGoogleLoginRequest}
             scope="profile email"
-            render={(renderProps) => (
-              <Button
+            render={(renderProps) => {
+              return (<Button
                 onClick={renderProps.onClick}
                 variant="contained"
                 size="large"
@@ -87,8 +93,8 @@ const LoginPage = ({
                 disabled={authPending}
               >
                 Login with NG ID
-              </Button>
-            )}
+              </Button>)
+            }}
             cookiePolicy="single_host_origin"
           />
         </Box>
